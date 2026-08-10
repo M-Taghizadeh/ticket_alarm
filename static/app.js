@@ -75,6 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-refresh-all').addEventListener('click', handleRefreshAll);
     document.getElementById('btn-clear-history').addEventListener('click', handleClearHistory);
     
+    document.getElementById('tf-main-enabled')?.addEventListener('change', saveMainTimeFilterSettings);
+    document.getElementById('tf-main-start')?.addEventListener('change', saveMainTimeFilterSettings);
+    document.getElementById('tf-main-end')?.addEventListener('change', saveMainTimeFilterSettings);
+    
 let cachedBuses = [];
 let cachedPurchaseUrl = '';
 
@@ -160,38 +164,49 @@ const initCities = async () => {
 // Sound Toggle
 const initSoundToggle = () => {
     const btn = document.getElementById('btn-sound-toggle');
+    const btnMain = document.getElementById('btn-sound-toggle-main');
     const icon = document.getElementById('sound-icon');
+    const iconMain = document.getElementById('sound-icon-main');
     
-    btn.addEventListener('click', () => {
+    const toggleSound = () => {
         soundEnabled = !soundEnabled;
         if (soundEnabled) {
-            icon.className = 'fa-solid fa-volume-high';
-            btn.style.color = '#10b981';
+            if (icon) icon.className = 'fa-solid fa-volume-high';
+            if (iconMain) iconMain.className = 'fa-solid fa-volume-high control-icon text-success';
+            if (btn) btn.style.color = '#10b981';
             playAlarmSound();
             showToast('صدای هشدار فعال شد.', 'success');
         } else {
-            icon.className = 'fa-solid fa-volume-xmark';
-            btn.style.color = '#ef4444';
+            if (icon) icon.className = 'fa-solid fa-volume-xmark';
+            if (iconMain) iconMain.className = 'fa-solid fa-volume-xmark control-icon text-danger';
+            if (btn) btn.style.color = '#ef4444';
             showToast('صدای هشدار غیرفعال شد.', 'info');
         }
-    });
+    };
+
+    if (btn) btn.addEventListener('click', toggleSound);
+    if (btnMain) btnMain.addEventListener('click', toggleSound);
 };
 
 // Telegram Modal & Settings
 const initTelegramModal = () => {
     const modal = document.getElementById('modal-telegram');
     const btnOpen = document.getElementById('btn-telegram-modal');
+    const btnOpenMain = document.getElementById('btn-telegram-modal-main');
     const btnClose = document.getElementById('btn-close-telegram');
     const form = document.getElementById('form-telegram');
     const btnTest = document.getElementById('btn-test-telegram');
     
-    btnOpen.addEventListener('click', () => {
+    const openModal = () => {
         fetchSettings();
         modal.classList.add('active');
-    });
+    };
+
+    if (btnOpen) btnOpen.addEventListener('click', openModal);
+    if (btnOpenMain) btnOpenMain.addEventListener('click', openModal);
     
-    btnClose.addEventListener('click', () => modal.classList.remove('active'));
-    modal.querySelector('.modal-backdrop').addEventListener('click', () => modal.classList.remove('active'));
+    if (btnClose) btnClose.addEventListener('click', () => modal.classList.remove('active'));
+    if (modal) modal.querySelector('.modal-backdrop').addEventListener('click', () => modal.classList.remove('active'));
     
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -248,6 +263,37 @@ const initTelegramModal = () => {
     });
 };
 
+const saveMainTimeFilterSettings = async () => {
+    const tfEnabled = document.getElementById('tf-main-enabled').checked;
+    const tfStart = document.getElementById('tf-main-start').value;
+    const tfEnd = document.getElementById('tf-main-end').value;
+    
+    const tfModalEnabled = document.getElementById('tf-enabled');
+    if (tfModalEnabled) tfModalEnabled.checked = tfEnabled;
+    const tfModalStart = document.getElementById('tf-start');
+    if (tfModalStart) tfModalStart.value = tfStart;
+    const tfModalEnd = document.getElementById('tf-end');
+    if (tfModalEnd) tfModalEnd.value = tfEnd;
+
+    try {
+        const resp = await fetch('/api/settings');
+        const currentSettings = await resp.json();
+        await fetch('/api/settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                ...currentSettings,
+                time_filter_enabled: tfEnabled,
+                time_filter_start: tfStart,
+                time_filter_end: tfEnd
+            })
+        });
+        showToast(tfEnabled ? `فیلتر زمان حرکت (${tfStart} تا ${tfEnd}) فعال شد.` : 'فیلتر زمان حرکت غیرفعال شد.', 'info');
+    } catch (e) {
+        console.error('Error saving main time filter:', e);
+    }
+};
+
 const fetchSettings = async () => {
     try {
         const resp = await fetch('/api/settings');
@@ -259,6 +305,13 @@ const fetchSettings = async () => {
         document.getElementById('tf-enabled').checked = !!data.time_filter_enabled;
         document.getElementById('tf-start').value = data.time_filter_start || '08:00';
         document.getElementById('tf-end').value = data.time_filter_end || '18:00';
+
+        const tfMainEnabled = document.getElementById('tf-main-enabled');
+        if (tfMainEnabled) tfMainEnabled.checked = !!data.time_filter_enabled;
+        const tfMainStart = document.getElementById('tf-main-start');
+        if (tfMainStart) tfMainStart.value = data.time_filter_start || '08:00';
+        const tfMainEnd = document.getElementById('tf-main-end');
+        if (tfMainEnd) tfMainEnd.value = data.time_filter_end || '18:00';
     } catch (e) {
         console.error('Settings load error:', e);
     }
@@ -373,7 +426,7 @@ const fetchMonitors = async (silent = false) => {
                     <div class="monitor-header">
                         <div class="route-title">
                             <i class="fa-solid fa-location-dot color-primary"></i>
-                            <span>${m.origin_name} ➔ ${m.destination_name}</span>
+                            <span>${m.origin_name} ← ${m.destination_name}</span>
                         </div>
                         <span class="route-date">${m.date}</span>
                     </div>
@@ -476,7 +529,7 @@ const fetchServices = async (monitorId, silent = false) => {
         const monitors = await monitorsResp.json();
         const mon = monitors.find(m => m.id === monitorId);
         if (mon) {
-            monitorLabel.textContent = `${mon.origin_name} ➔ ${mon.destination_name} (${mon.date})`;
+            monitorLabel.textContent = `${mon.origin_name} ← ${mon.destination_name} (${mon.date})`;
         }
         
         cachedBuses = buses || [];

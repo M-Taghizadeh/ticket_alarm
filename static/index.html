@@ -21,17 +21,18 @@
     <link rel="stylesheet" href="/fontawesome/all.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/style.css?v=10">
+    <link rel="stylesheet" href="/style.css?v=19">
 </head>
 <body class="dark-theme">
     <div id="app" class="app-container">
         
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-top">
+        <!-- Minimal Top Header Bar -->
+        <header class="app-header minimal-header">
+            <div class="header-main-row">
+                <!-- Brand Title -->
                 <div class="brand">
                     <div class="brand-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M8 6v6"/>
                             <path d="M16 6v6"/>
                             <path d="M4 12h16"/>
@@ -41,29 +42,46 @@
                         </svg>
                         <span class="pulse-dot"></span>
                     </div>
-                    <div class="brand-text">
-                        <h1>پایش بلیط سفر۷۲۴</h1>
+                    <span class="brand-title">پایش سفر۷۲۴</span>
+                </div>
+
+                <!-- Add Monitor Input Form -->
+                <form id="form-add-url" class="minimal-add-form">
+                    <div class="minimal-input-wrapper">
+                        <i class="fa-solid fa-link input-icon"></i>
+                        <input type="text" id="input-url" placeholder="لینک سفر۷۲۴ را وارد کنید..." required>
+                        <button type="submit" class="btn btn-accent btn-icon-only" id="btn-submit-url" title="شروع پایش">
+                            <i class="fa-solid fa-bolt"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Time Filter Quick Bar -->
+                <div class="minimal-time-filter">
+                    <label class="switch-label-sm" title="فعال‌سازی فیلتر زمان حرکت">
+                        <input type="checkbox" id="tf-main-enabled">
+                        <span class="switch-slider-sm"></span>
+                        <i class="fa-solid fa-clock color-primary"></i>
+                    </label>
+                    <div class="time-range-compact">
+                        <input type="time" id="tf-main-start" value="08:00">
+                        <span>تا</span>
+                        <input type="time" id="tf-main-end" value="18:00">
                     </div>
                 </div>
-            </div>
-            
-            <div class="header-bottom">
-                <div class="status-badge live" id="system-status">
-                    <span class="dot"></span>
-                    <span class="status-text">پایش فعال (هر ۱ دقیقه)</span>
-                </div>
-                
+
+                <!-- Quick Action Icons -->
                 <div class="quick-icons">
-                    <button class="btn btn-icon" id="btn-sound-toggle" title="تغییر وضعیت صدای هشدار">
+                    <button class="btn btn-icon btn-sm" id="btn-sound-toggle" title="تغییر وضعیت صدای هشدار">
                         <i class="fa-solid fa-volume-high" id="sound-icon"></i>
                     </button>
                     
-                    <button class="btn btn-icon" id="btn-telegram-modal" title="تنظیمات تلگرام">
-                        <i class="fa-brands fa-telegram"></i>
+                    <button class="btn btn-icon btn-sm" id="btn-telegram-modal" title="تنظیمات تلگرام">
+                        <i class="fa-brands fa-telegram color-telegram"></i>
                     </button>
 
-                    <button class="btn btn-primary btn-sm" id="btn-pwa-install">
-                        <i class="fa-solid fa-mobile-screen-button"></i> نصب اپلیکیشن
+                    <button class="btn btn-primary btn-sm pwa-btn-compact" id="btn-pwa-install" title="نصب اپلیکیشن">
+                        <i class="fa-solid fa-mobile-screen-button"></i> <span>نصب</span>
                     </button>
                 </div>
             </div>
@@ -71,27 +89,6 @@
 
         <!-- Main Container -->
         <main class="app-main">
-            
-            <!-- Quick Add Monitor Section -->
-            <section class="card glass-card add-monitor-section">
-                <div class="card-header">
-                    <h2><i class="fa-solid fa-plus-circle"></i> افزودن مسیر جدید برای پایش</h2>
-                </div>
-
-                <div class="card-body">
-                    <form id="form-add-url">
-                        <div class="input-group">
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-link input-icon"></i>
-                                <input type="text" id="input-url" placeholder="لینک صفحه اتوبوس‌های سفر۷۲۴ را وارد کنید..." required>
-                            </div>
-                            <button type="submit" class="btn btn-accent" id="btn-submit-url">
-                                <i class="fa-solid fa-bolt"></i> شروع پایش مسیر
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </section>
 
             <!-- Dashboard Grid -->
             <div class="dashboard-grid">
@@ -101,8 +98,8 @@
                     <div class="card glass-card">
                         <div class="card-header">
                             <h2><i class="fa-solid fa-route"></i> مسیرهای در حال پایش (<span id="monitors-count">0</span>)</h2>
-                            <button class="btn btn-sm btn-outline" id="btn-refresh-all">
-                                <i class="fa-solid fa-rotate"></i> استعلام هم‌اکنون
+                            <button class="btn btn-icon btn-sm" id="btn-refresh-all" title="استعلام هم‌اکنون">
+                                <i class="fa-solid fa-rotate"></i>
                             </button>
                         </div>
                         <div class="card-body p-2">
@@ -244,6 +241,6 @@
     </div>
 
     <!-- App Logic JS -->
-    <script src="/app.js?v=10"></script>
+    <script src="/app.js?v=19"></script>
 </body>
 </html>

@@ -2,12 +2,12 @@
     --bg-main: #090d16;
     --bg-card: rgba(15, 23, 42, 0.85);
     --bg-card-hover: rgba(30, 41, 59, 0.95);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --border-glow: rgba(59, 130, 246, 0.3);
+    --border-color: rgba(255, 255, 255, 0.12);
+    --border-glow: rgba(59, 130, 246, 0.4);
     
     --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --text-dim: #64748b;
+    --text-muted: #cbd5e1;
+    --text-dim: #94a3b8;
     
     --primary: #3b82f6;
     --primary-hover: #2563eb;
@@ -15,26 +15,38 @@
     --accent-hover: #d97706;
     
     --success: #10b981;
-    --success-bg: rgba(16, 185, 129, 0.15);
+    --success-bg: rgba(16, 185, 129, 0.18);
     --warning: #f59e0b;
     --danger: #ef4444;
-    --danger-bg: rgba(239, 68, 68, 0.15);
+    --danger-bg: rgba(239, 68, 68, 0.18);
     --telegram: #0088cc;
 
     --radius-sm: 8px;
     --radius-md: 14px;
     --radius-lg: 20px;
 
-    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
-    --shadow-glow: 0 8px 32px rgba(59, 130, 246, 0.2);
+    --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.4);
+    --shadow-glow: 0 8px 32px rgba(59, 130, 246, 0.3);
     --font-fa: 'Vazirmatn', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-*, *:before, *:after {
+*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: var(--font-fa);
+}
+
+body, button, input, select, textarea, optgroup {
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Protect FontAwesome icon fonts from Vazirmatn override */
+.fa, .fas, .fa-solid, .far, .fa-regular, .fab, .fa-brands, i[class*="fa-"] {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+}
+
+.fa::before, .fas::before, .fa-solid::before, .far::before, .fa-regular::before, .fab::before, .fa-brands::before, i[class*="fa-"]::before {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
 }
 
 html, body {
@@ -43,10 +55,242 @@ html, body {
     overflow-x: hidden;
 }
 
-body {
-    background: radial-gradient(circle at 50% 0%, #1e293b 0%, #090d16 100%);
-    background-attachment: fixed;
-    color: var(--text-main);
+/* Universal Custom Modern Thin Scrollbars */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(99, 102, 241, 0.4) rgba(15, 23, 42, 0.2);
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(99, 102, 241, 0.4);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Top Alert Panel Section */
+.alert-panel-section {
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.15);
+}
+
+.alert-panel-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.alert-panel-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.alert-panel-title h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.alert-subtitle-text {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.icon-pulse-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-color);
+    font-size: 16px;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+}
+
+/* Minimal Top Toolbar Header */
+.app-header.minimal-header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.header-main-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.minimal-header .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.minimal-header .brand-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.minimal-add-form {
+    flex: 1;
+    min-width: 260px;
+    max-width: 500px;
+}
+
+.minimal-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.minimal-input-wrapper .input-icon {
+    position: absolute;
+    right: 12px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.minimal-input-wrapper input {
+    width: 100%;
+    height: 38px;
+    padding: 0 36px 0 44px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.minimal-input-wrapper input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.25);
+    outline: none;
+}
+
+.minimal-input-wrapper .btn-icon-only {
+    position: absolute;
+    left: 4px;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.minimal-time-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 4px 10px;
+}
+
+.switch-label-sm {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.switch-label-sm input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider-sm {
+    position: relative;
+    display: inline-block;
+    width: 28px;
+    height: 16px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    transition: .2s;
+}
+
+.switch-slider-sm:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .2s;
+}
+
+.switch-label-sm input:checked + .switch-slider-sm {
+    background-color: var(--accent-color);
+}
+
+.switch-label-sm input:checked + .switch-slider-sm:before {
+    transform: translateX(12px);
+}
+
+.time-range-compact {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.time-range-compact input[type="time"] {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: #fff;
+    padding: 2px 4px;
+    font-size: 11px;
+    text-align: center;
+    width: 60px;
+}
+
+html, body {
+    background: radial-gradient(circle at 50% 0%, #0f172a 0%, #090d16 60%, #020617 100%) !important;
+    background-attachment: fixed !important;
+    color: #f8fafc !important;
     min-height: 100vh;
     direction: rtl;
     text-align: right;
@@ -908,36 +1152,45 @@ input[type="checkbox"] {
         width: 100%;
     }
 
-    .app-header {
-        padding: 12px;
-        margin-bottom: 14px;
-        gap: 10px;
+    .app-header.minimal-header {
+        padding: 8px 12px;
+        margin-bottom: 12px;
+        border-radius: 10px;
     }
 
-    .header-top {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .brand-text h1 {
-        font-size: 16px;
-    }
-
-    .header-bottom {
-        flex-direction: column;
-        align-items: stretch;
+    .header-main-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas: 
+            "brand quick"
+            "form form"
+            "filter filter";
         gap: 8px;
+        align-items: center;
     }
 
-    .status-badge {
-        width: 100%;
-        justify-content: center;
-        font-size: 11px;
+    .minimal-header .brand {
+        grid-area: brand;
     }
 
     .quick-icons {
-        width: 100%;
-        justify-content: center;
+        grid-area: quick;
+        gap: 6px;
+        width: auto !important;
+        justify-content: flex-end !important;
+    }
+
+    .minimal-add-form {
+        grid-area: form;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .minimal-time-filter {
+        grid-area: filter;
+        width: 100% !important;
+        justify-content: space-between !important;
     }
 
     .input-group {
