@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>سامانه پایش هوشمند بلیط سفر۷۲۴</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="پایش بلیط">
+    <link rel="apple-touch-icon" href="/icon.png">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="dark-theme">
+    <div id="app" class="app-container">
+        
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="brand">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-bus-simple"></i>
+                        <span class="pulse-dot"></span>
+                    </div>
+                    <div class="brand-text">
+                        <h1>پایش بلیط سفر۷۲۴</h1>
+                        <p class="subtitle">سیستم هشدار آنی تغییرات و صندلی‌های خالی</p>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="status-badge live" id="system-status">
+                        <span class="dot"></span>
+                        <span class="status-text">پایش فعال (هر ۱ دقیقه)</span>
+                    </div>
+                    
+                    <button class="btn btn-icon" id="btn-sound-toggle" title="تغییر وضعیت صدای هشدار">
+                        <i class="fa-solid fa-volume-high" id="sound-icon"></i>
+                    </button>
+                    
+                    <button class="btn btn-icon" id="btn-telegram-modal" title="تنظیمات تلگرام">
+                        <i class="fa-brands fa-telegram"></i>
+                    </button>
+
+                    <button class="btn btn-primary btn-sm" id="btn-pwa-install" style="display:none;">
+                        <i class="fa-solid fa-download"></i> نصب اپلیکیشن
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Container -->
+        <main class="app-main">
+            
+            <!-- Quick Add Monitor Section -->
+            <section class="card glass-card add-monitor-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-plus-circle"></i> افزودن مسیر جدید برای پایش</h2>
+                </div>
+
+                <div class="card-body">
+                    <form id="form-add-url">
+                        <div class="input-group">
+                            <i class="fa-solid fa-link input-icon"></i>
+                            <input type="url" id="input-url" placeholder="لینک سفر۷۲۴ را وارد کنید (مثال: https://safar724.com/bus/tehran-lahijan?date=1405-05-20)" required>
+                            <button type="submit" class="btn btn-accent" id="btn-submit-url">
+                                <i class="fa-solid fa-bolt"></i> شروع پایش مسیر
+                            </button>
+                        </div>
+                        <p class="form-help"><i class="fa-solid fa-info-circle"></i> کافیست لینک صفحه لیست اتوبوس‌های سفر۷۲۴ را کپی کرده و در کادر بالا قرار دهید.</p>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                
+                <!-- Left Column: Active Monitors List -->
+                <div class="grid-col col-monitors">
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-route"></i> مسیرهای در حال پایش (<span id="monitors-count">0</span>)</h2>
+                            <button class="btn btn-sm btn-outline" id="btn-refresh-all">
+                                <i class="fa-solid fa-rotate"></i> استعلام هم‌اکنون
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="monitors-list" class="monitors-list">
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-compass"></i>
+                                    <p>هیچ مسیری ثبت نشده است. از کادر بالا لینک مسیر سفر۷۲۴ را اضافه کنید.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Live Tickets & Change Logs -->
+                <div class="grid-col col-details">
+                    
+                    <!-- Selected Route Buses -->
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <div class="header-title">
+                                <h2><i class="fa-solid fa-bus"></i> لیست اتوبوس‌های مسیر</h2>
+                                <span class="badge" id="selected-monitor-label">انتخاب نشده</span>
+                            </div>
+                            <div class="filter-pills">
+                                <button class="filter-pill active" data-filter="all">همه (<span id="count-all">0</span>)</button>
+                                <button class="filter-pill" data-filter="bus">🚌 اتوبوس (<span id="count-bus">0</span>)</button>
+                                <button class="filter-pill" data-filter="savari">🚗 سواری (<span id="count-savari">0</span>)</button>
+                                <button class="filter-pill" data-filter="available">🎟️ صندلی خالی (<span id="count-available">0</span>)</button>
+                                <button class="filter-pill" data-filter="vip">⭐ VIP</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="buses-container" class="buses-container">
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-bus-simple"></i>
+                                    <p>یک مسیر را از لیست سمت راست انتخاب کنید تا اتوبوس‌های آن نمایش داده شوند.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Change History Log -->
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-clock-rotate-left"></i> تاریخچه تغییرات و هشدارهای لحظه‌ای</h2>
+                            <button class="btn btn-sm btn-danger-outline" id="btn-clear-history">
+                                <i class="fa-solid fa-trash"></i> پاک‌سازی تاریخچه
+                            </button>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="history-stream" class="history-stream">
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-bell-slash"></i>
+                                    <p>هنوز تغییری ثبت نشده است. سیستم هر ۱ دقیقه تغییرات ظرفیت و اتوبوس‌ها را گزارش می‌کند.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Telegram Config Modal -->
+        <div class="modal" id="modal-telegram">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h3><i class="fa-brands fa-telegram color-telegram"></i> تنظیمات اطلاع‌رسانی ربات تلگرام</h3>
+                    <button class="btn-close" id="btn-close-telegram">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted fs-sm">با فعال‌سازی ربات تلگرام، به محض باز شدن صندلی خالی یا اضافه شدن اتوبوس جدید، پیام هشدار حاوی لینک مستقیم خرید به تلگرام شما ارسال می‌شود.</p>
+                    
+                    <form id="form-telegram">
+                        <div class="form-group">
+                            <label for="tg-token">Bot Token</label>
+                            <input type="text" id="tg-token" placeholder="123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ" dir="ltr">
+                            <span class="input-help">توکن دریافت شده از BotFather@</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tg-chat-id">Chat ID</label>
+                            <input type="text" id="tg-chat-id" placeholder="987654321" dir="ltr">
+                            <span class="input-help">آیدی عددی چت یا کانال شما (از userinfobot@ قابل دریافت است)</span>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="switch-label">
+                                <input type="checkbox" id="tg-enabled">
+                                <span class="switch-slider"></span>
+                                <span class="label-text">فعال‌سازی ارسال پیام به تلگرام</span>
+                            </label>
+                        </div>
+
+                        <div class="modal-actions">
+                            <button type="button" class="btn btn-outline" id="btn-test-telegram">
+                                <i class="fa-solid fa-paper-plane"></i> ارسال پیام تست
+                            </button>
+                            <button type="submit" class="btn btn-accent">
+                                <i class="fa-solid fa-check"></i> ذخیره تنظیمات
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications Container -->
+        <div id="toast-container" class="toast-container"></div>
+        
+    </div>
+
+    <!-- App Logic JS -->
+    <script src="/app.js"></script>
+</body>
+</html>

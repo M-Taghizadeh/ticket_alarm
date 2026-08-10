@@ -1,0 +1,45 @@
+{
+  "settings": {
+    "check_interval": 60,
+    "telegram_token": "",
+    "telegram_chat_id": "",
+    "telegram_enabled": false,
+    "sound_alarm": true,
+    "notify_on_new": true,
+    "notify_on_increase": true,
+    "notify_on_decrease": false,
+    "notify_on_price": true
+  },
+  "monitors": [
+    {
+      "id": "mon_1786347187",
+      "url": "https://safar724.com/bus/tehran-lahijan?date=1405-05-20",
+      "origin_code": "11320000",
+      "destination_code": "54450000",
+      "origin_name": "تهران",
+      "destination_name": "لاهیجان",
+      "date": "1405-05-20",
+      "active": true,
+      "created_at": "2026-08-10 11:03:07",
+      "last_checked": "2026-08-10 11:08:58",
+      "total_buses": 41,
+      "available_seats": 81,
+      "status": "OK"
+    },
+    {
+      "id": "mon_1786347555",
+      "url": "https://safar724.com/bus/tehran-astanehyeashrafiyeh?date=1405-05-20",
+      "origin_code": "11320000",
+      "destination_code": "54340000",
+      "origin_name": "تهران",
+      "destination_name": "آستانه  اشرفیه",
+      "date": "1405-05-20",
+      "active": true,
+      "created_at": "2026-08-10 11:09:15",
+      "last_checked": "2026-08-10 11:09:17",
+      "total_buses": 13,
+      "available_seats": 6,
+      "status": "OK"
+    }
+  ]
+}
