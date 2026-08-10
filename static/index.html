@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/style.css?v=5">
+    <link rel="stylesheet" href="/style.css?v=7">
 </head>
 <body class="dark-theme">
     <div id="app" class="app-container">
@@ -32,7 +32,14 @@
             <div class="header-top">
                 <div class="brand">
                     <div class="brand-icon">
-                        <i class="fa-solid fa-bus-simple"></i>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 6v6"/>
+                            <path d="M16 6v6"/>
+                            <path d="M4 12h16"/>
+                            <path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6z"/>
+                            <circle cx="7.5" cy="16.5" r="1.5"/>
+                            <circle cx="16.5" cy="16.5" r="1.5"/>
+                        </svg>
                         <span class="pulse-dot"></span>
                     </div>
                     <div class="brand-text">
@@ -123,11 +130,11 @@
                                 <span class="badge" id="selected-monitor-label">انتخاب نشده</span>
                             </div>
                             <div class="filter-pills">
-                                <button class="filter-pill active" data-filter="all">همه (<span id="count-all">0</span>)</button>
-                                <button class="filter-pill" data-filter="bus">🚌 اتوبوس (<span id="count-bus">0</span>)</button>
-                                <button class="filter-pill" data-filter="savari">🚗 سواری (<span id="count-savari">0</span>)</button>
-                                <button class="filter-pill" data-filter="available">🎟️ صندلی خالی (<span id="count-available">0</span>)</button>
-                                <button class="filter-pill" data-filter="vip">⭐ VIP</button>
+                                <button class="filter-pill active" data-filter="all"><i class="fa-solid fa-layer-group"></i> همه (<span id="count-all">0</span>)</button>
+                                <button class="filter-pill" data-filter="bus"><i class="fa-solid fa-bus"></i> اتوبوس (<span id="count-bus">0</span>)</button>
+                                <button class="filter-pill" data-filter="savari"><i class="fa-solid fa-car"></i> سواری (<span id="count-savari">0</span>)</button>
+                                <button class="filter-pill" data-filter="available"><i class="fa-solid fa-chair"></i> صندلی خالی (<span id="count-available">0</span>)</button>
+                                <button class="filter-pill" data-filter="vip"><i class="fa-solid fa-star"></i> VIP</button>
                             </div>
                         </div>
                         <div class="card-body p-0">
@@ -214,6 +221,6 @@
     </div>
 
     <!-- App Logic JS -->
-    <script src="/app.js?v=5"></script>
+    <script src="/app.js?v=7"></script>
 </body>
 </html>

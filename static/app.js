@@ -543,7 +543,7 @@ const renderBuses = () => {
             : `<span class="vehicle-badge vehicle-badge-bus"><i class="fa-solid fa-bus"></i> اتوبوس</span>`;
 
         const vipTag = b.IsVip ? `<span class="bus-vip-tag"><i class="fa-solid fa-star"></i> VIP</span>` : '';
-        const priceText = b.Price ? `${b.Price.toLocaleString()} <span>تومان</span>` : 'نامشخص';
+        const priceText = b.Price ? `${b.Price.toLocaleString()} <span>ریال</span>` : 'نامشخص';
         const busTypeDetail = b.BusType ? `<span class="text-dim fs-sm" style="font-size:11px; display:block; color:#94a3b8;">${b.BusType}</span>` : '';
 
         return `

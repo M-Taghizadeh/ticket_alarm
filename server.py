@@ -248,11 +248,11 @@ def process_monitor_check(monitor_id: str) -> List[Dict[str, Any]]:
                         "company": comp_name,
                         "seats": curr_seats,
                         "price": price,
-                        "description": f"{vehicle_type_name} ساعت {time_str} شرکت {comp_name} ({bus_type_raw}) با {curr_seats} صندلی به قیمت {price:,} تومان اضافه شد."
+                        "description": f"{vehicle_type_name} ساعت {time_str} شرکت {comp_name} ({bus_type_raw}) با {curr_seats} صندلی به قیمت {price:,} ریال اضافه شد."
                     }
                     detected_changes.append(change_obj)
 
-                    tg_msg = f"{vehicle_icon} <b>{vehicle_type_name} جدید اضافه شد!</b>\n📍 <b>مسیر:</b> {monitor['origin_name']} ➔ {monitor['destination_name']}\n📅 <b>تاریخ:</b> {date_str}\n⏰ <b>ساعت:</b> {time_str} ({comp_name} - {bus_type_raw})\n🎟️ <b>ظرفیت اولیه:</b> {curr_seats} صندلی\n💵 <b>قیمت:</b> {price:,} تومان\n🔗 <a href='{monitor.get('url')}'>خرید بلیط از سفر۷۲۴</a>"
+                    tg_msg = f"{vehicle_icon} <b>{vehicle_type_name} جدید اضافه شد!</b>\n📍 <b>مسیر:</b> {monitor['origin_name']} ➔ {monitor['destination_name']}\n📅 <b>تاریخ:</b> {date_str}\n⏰ <b>ساعت:</b> {time_str} ({comp_name} - {bus_type_raw})\n🎟️ <b>ظرفیت اولیه:</b> {curr_seats} صندلی\n💵 <b>قیمت:</b> {price:,} ریال\n🔗 <a href='{monitor.get('url')}'>خرید بلیط از سفر۷۲۴</a>"
                     send_telegram_message(tg_msg)
             else:
                 prev = prev_map[bus_id]
@@ -281,7 +281,7 @@ def process_monitor_check(monitor_id: str) -> List[Dict[str, Any]]:
                     detected_changes.append(change_obj)
 
                     header_tg = f"🎉 <b>صندلی جدید باز شد! ({vehicle_type_name})</b>\n" if is_zero_to_n else f"📈 <b>افزایش ظرفیت {vehicle_type_name}!</b>\n"
-                    tg_msg = header_tg + f"📍 <b>مسیر:</b> {monitor['origin_name']} ➔ {monitor['destination_name']}\n📅 <b>تاریخ:</b> {date_str}\n⏰ <b>ساعت:</b> {time_str} ({comp_name} - {bus_type_raw})\n🎟️ <b>ظرفیت جدید:</b> <b>{curr_seats} صندلی</b> (قبلی: {prev_seats})\n💵 <b>قیمت:</b> {price:,} تومان\n🔗 <a href='{monitor.get('url')}'>خرید فوری بلیط از سفر۷۲۴</a>"
+                    tg_msg = header_tg + f"📍 <b>مسیر:</b> {monitor['origin_name']} ➔ {monitor['destination_name']}\n📅 <b>تاریخ:</b> {date_str}\n⏰ <b>ساعت:</b> {time_str} ({comp_name} - {bus_type_raw})\n🎟️ <b>ظرفیت جدید:</b> <b>{curr_seats} صندلی</b> (قبلی: {prev_seats})\n💵 <b>قیمت:</b> {price:,} ریال\n🔗 <a href='{monitor.get('url')}'>خرید فوری بلیط از سفر۷۲۴</a>"
                     send_telegram_message(tg_msg)
 
                 elif curr_seats < prev_seats and settings.get("notify_on_decrease", False):
@@ -317,11 +317,11 @@ def process_monitor_check(monitor_id: str) -> List[Dict[str, Any]]:
                         "company": comp_name,
                         "price": price,
                         "prev_price": prev_price,
-                        "description": f"قیمت بلیط {vehicle_type_name} ساعت {time_str} ({comp_name}) از {prev_price:,} به {price:,} تومان تغییر کرد."
+                        "description": f"قیمت بلیط {vehicle_type_name} ساعت {time_str} ({comp_name}) از {prev_price:,} به {price:,} ریال تغییر کرد."
                     }
                     detected_changes.append(change_obj)
 
-                    tg_msg = f"💰 <b>تغییر قیمت بلیط {vehicle_type_name}!</b>\n📍 <b>مسیر:</b> {monitor['origin_name']} ➔ {monitor['destination_name']}\n📅 <b>تاریخ:</b> {date_str}\n⏰ <b>ساعت:</b> {time_str} ({comp_name})\n💵 <b>قیمت جدید:</b> {price:,} تومان (قبلی: {prev_price:,})\n🔗 <a href='{monitor.get('url')}'>مشاهده در سفر۷۲۴</a>"
+                    tg_msg = f"💰 <b>تغییر قیمت بلیط {vehicle_type_name}!</b>\n📍 <b>مسیر:</b> {monitor['origin_name']} ➔ {monitor['destination_name']}\n📅 <b>تاریخ:</b> {date_str}\n⏰ <b>ساعت:</b> {time_str} ({comp_name})\n💵 <b>قیمت جدید:</b> {price:,} ریال (قبلی: {prev_price:,})\n🔗 <a href='{monitor.get('url')}'>مشاهده در سفر۷۲۴</a>"
                     send_telegram_message(tg_msg)
 
         snapshots_data[monitor_id] = current_items

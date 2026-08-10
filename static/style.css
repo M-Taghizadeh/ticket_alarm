@@ -37,36 +37,6 @@
     font-family: var(--font-fa);
 }
 
-/* Native Icon Fallbacks for Mobile / Offline Networks (Prevents [ ] boxes) */
-i.fa-bus-simple::before, i.fa-bus::before { content: "🚌 "; }
-i.fa-bus-slash::before { content: "🚫 "; }
-i.fa-car::before { content: "🚗 "; }
-i.fa-volume-high::before { content: "🔊 "; }
-i.fa-volume-xmark::before { content: "🔇 "; }
-i.fa-telegram::before, i.fa-paper-plane::before { content: "✈️ "; }
-i.fa-mobile-screen-button::before { content: "📲 "; }
-i.fa-plus-circle::before { content: "➕ "; }
-i.fa-link::before { content: "🔗 "; }
-i.fa-bolt::before { content: "⚡ "; }
-i.fa-route::before { content: "🗺️ "; }
-i.fa-rotate::before, i.fa-arrows-rotate::before { content: "🔄 "; }
-i.fa-circle-check::before { content: "✅ "; }
-i.fa-circle-pause::before { content: "⏸️ "; }
-i.fa-trash::before { content: "🗑️ "; }
-i.fa-ticket::before { content: "🎟️ "; }
-i.fa-clock-rotate-left::before { content: "📜 "; }
-i.fa-bell::before, i.fa-bell-slash::before { content: "🔔 "; }
-i.fa-location-dot::before { content: "📍 "; }
-i.fa-chair::before { content: "💺 "; }
-i.fa-compass::before { content: "🧭 "; }
-i.fa-circle-info::before { content: "ℹ️ "; }
-i.fa-download::before { content: "📥 "; }
-
-/* FontAwesome Override if Loaded */
-.fa, .fas, .fa-solid, .fab, .fa-brands {
-    font-family: "Font Awesome 6 Free", -apple-system, BlinkMacSystemFont, "Segoe UI Emoji", "Apple Color Emoji", sans-serif;
-}
-
 html, body {
     width: 100%;
     max-width: 100vw;
