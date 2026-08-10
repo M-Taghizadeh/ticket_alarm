@@ -10,8 +10,13 @@ import time
 import ssl
 import re
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Optional, Any
+
+TEHRAN_TZ = timezone(timedelta(hours=3, minutes=30))
+
+def get_tehran_now_str(fmt: str = "%Y-%m-%d %H:%M:%S") -> str:
+    return datetime.now(TEHRAN_TZ).strftime(fmt)
 
 from fastapi import FastAPI, BackgroundTasks, HTTPException, Query
 from fastapi.staticfiles import StaticFiles

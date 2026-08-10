@@ -198,6 +198,9 @@ const initTelegramModal = () => {
         const token = document.getElementById('tg-token').value.trim();
         const chat_id = document.getElementById('tg-chat-id').value.trim();
         const enabled = document.getElementById('tg-enabled').checked;
+        const tfEnabled = document.getElementById('tf-enabled').checked;
+        const tfStart = document.getElementById('tf-start').value;
+        const tfEnd = document.getElementById('tf-end').value;
         
         try {
             const resp = await fetch('/api/settings', {
@@ -206,11 +209,14 @@ const initTelegramModal = () => {
                 body: JSON.stringify({
                     telegram_token: token,
                     telegram_chat_id: chat_id,
-                    telegram_enabled: enabled
+                    telegram_enabled: enabled,
+                    time_filter_enabled: tfEnabled,
+                    time_filter_start: tfStart,
+                    time_filter_end: tfEnd
                 })
             });
             if (resp.ok) {
-                showToast('تنظیمات تلگرام ذخیره شد.', 'success');
+                showToast('تنظیمات هشدارها با موفقیت ذخیره شد.', 'success');
                 modal.classList.remove('active');
             }
         } catch (err) {
@@ -249,6 +255,10 @@ const fetchSettings = async () => {
         document.getElementById('tg-token').value = data.telegram_token || '';
         document.getElementById('tg-chat-id').value = data.telegram_chat_id || '';
         document.getElementById('tg-enabled').checked = !!data.telegram_enabled;
+        
+        document.getElementById('tf-enabled').checked = !!data.time_filter_enabled;
+        document.getElementById('tf-start').value = data.time_filter_start || '08:00';
+        document.getElementById('tf-end').value = data.time_filter_end || '18:00';
     } catch (e) {
         console.error('Settings load error:', e);
     }

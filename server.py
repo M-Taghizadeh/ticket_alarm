@@ -7,8 +7,13 @@ import time
 import ssl
 import re
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Optional, Any
+
+TEHRAN_TZ = timezone(timedelta(hours=3, minutes=30))
+
+def get_tehran_now_str(fmt: str = "%Y-%m-%d %H:%M:%S") -> str:
+    return datetime.now(TEHRAN_TZ).strftime(fmt)
 
 from fastapi import FastAPI, BackgroundTasks, HTTPException, Query
 from fastapi.staticfiles import StaticFiles
@@ -40,10 +45,27 @@ DEFAULT_CONFIG = {
         "notify_on_new": True,
         "notify_on_increase": True,
         "notify_on_decrease": False,
-        "notify_on_price": True
+        "notify_on_price": True,
+        "time_filter_enabled": False,
+        "time_filter_start": "08:00",
+        "time_filter_end": "18:00"
     },
     "monitors": []
 }
+
+def is_time_in_range(time_str: str, start_time: str, end_time: str) -> bool:
+    if not time_str:
+        return True
+    try:
+        t = time_str.strip()[:5]
+        st = (start_time or "00:00").strip()[:5]
+        et = (end_time or "23:59").strip()[:5]
+        if st <= et:
+            return st <= t <= et
+        else:
+            return t >= st or t <= et
+    except Exception:
+        return True
 
 def load_json(file_path: str, default_data: Any) -> Any:
     if os.path.exists(file_path):
@@ -113,7 +135,7 @@ class Safar724Client:
         result = {
             "origin_slug": "tehran",
             "destination_slug": "lahijan",
-            "date": datetime.now().strftime("%Y-%m-%d"),
+            "date": get_tehran_now_str("%Y-%m-%d"),
             "origin_code": None,
             "destination_code": None,
             "origin_name": None,
@@ -202,7 +224,7 @@ def process_monitor_check(monitor_id: str) -> List[Dict[str, Any]]:
     try:
         raw_resp = Safar724Client.fetch_services(origin_code, destination_code, date_str)
         current_items = raw_resp.get("Items", [])
-        now_iso = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        now_iso = get_tehran_now_str("%Y-%m-%d %H:%M:%S")
 
         monitor["last_checked"] = now_iso
         monitor["status"] = "OK"
@@ -232,6 +254,14 @@ def process_monitor_check(monitor_id: str) -> List[Dict[str, Any]]:
             vehicle_type_name = "سواری (تاکسی)" if is_savari else "اتوبوس"
             vehicle_icon = "🚗" if is_savari else "🚌"
             curr["vehicle_category"] = "SAVARI" if is_savari else "BUS"
+
+            # Filter notifications by user-specified departure time range
+            time_filter_enabled = settings.get("time_filter_enabled", False)
+            tf_start = settings.get("time_filter_start", "08:00")
+            tf_end = settings.get("time_filter_end", "18:00")
+
+            if time_filter_enabled and not is_time_in_range(time_str, tf_start, tf_end):
+                continue
 
             if bus_id not in prev_map:
                 if prev_snapshot and settings.get("notify_on_new", True):
@@ -421,7 +451,7 @@ def add_monitor(payload: Dict[str, Any]):
         "destination_name": destination_name,
         "date": date_str,
         "active": True,
-        "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "created_at": get_tehran_now_str("%Y-%m-%d %H:%M:%S"),
         "last_checked": None,
         "total_buses": 0,
         "available_seats": 0,
