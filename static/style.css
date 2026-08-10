@@ -281,10 +281,13 @@ html, body {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 4px;
     color: #fff;
-    padding: 2px 4px;
+    padding-top: 2px;
+    padding-left: 7px;
+    padding-right: 4px;
+    margin: 4px;
     font-size: 11px;
     text-align: center;
-    width: 60px;
+    width: 100px;
 }
 
 html, body {
