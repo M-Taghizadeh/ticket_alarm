@@ -96,8 +96,6 @@ document.querySelectorAll('.filter-pill').forEach(pill => {
     }, 10000);
 });
 
-let deferredInstallPrompt = null;
-
 // Service Worker & PWA Install
 const initPWA = () => {
     if ('serviceWorker' in navigator) {
@@ -260,8 +258,12 @@ const fetchSettings = async () => {
 const handleAddUrl = async (e) => {
     e.preventDefault();
     const inputUrl = document.getElementById('input-url');
-    const url = inputUrl.value.trim();
+    let url = inputUrl.value.trim();
     if (!url) return;
+    
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+    }
     
     const submitBtn = document.getElementById('btn-submit-url');
     submitBtn.disabled = true;
@@ -275,15 +277,15 @@ const handleAddUrl = async (e) => {
         });
         const data = await resp.json();
         if (resp.ok) {
-            showToast(`مسیر ${data.origin_name} به ${data.destination_name} به پایش اضافه شد.`, 'success');
+            showToast(`مسیر ${data.origin_name} به ${data.destination_name} با موفقیت به پایش اضافه شد.`, 'success');
             inputUrl.value = '';
             fetchMonitors();
             selectMonitor(data.id);
         } else {
-            showToast(data.detail || 'خطا در افزودن مسیر', 'error');
+            showToast(data.detail || 'خطا در ثبت مسیر سفر۷۲۴', 'error');
         }
     } catch (err) {
-        showToast('برقرار نشدن ارتباط با سرور', 'error');
+        showToast('خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.', 'error');
     } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> شروع پایش مسیر';
