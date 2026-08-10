@@ -96,6 +96,8 @@ document.querySelectorAll('.filter-pill').forEach(pill => {
     }, 10000);
 });
 
+let deferredInstallPrompt = null;
+
 // Service Worker & PWA Install
 const initPWA = () => {
     if ('serviceWorker' in navigator) {
@@ -105,20 +107,28 @@ const initPWA = () => {
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredInstallPrompt = e;
-        const btnInstall = document.getElementById('btn-pwa-install');
-        if (btnInstall) {
-            btnInstall.style.display = 'inline-flex';
-            btnInstall.addEventListener('click', () => {
-                deferredInstallPrompt.prompt();
-                deferredInstallPrompt.userChoice.then((choice) => {
-                    if (choice.outcome === 'accepted') {
-                        btnInstall.style.display = 'none';
-                    }
-                    deferredInstallPrompt = null;
-                });
-            });
-        }
     });
+
+    const btnInstall = document.getElementById('btn-pwa-install');
+    if (btnInstall) {
+        btnInstall.addEventListener('click', async () => {
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                const choice = await deferredInstallPrompt.userChoice;
+                if (choice.outcome === 'accepted') {
+                    showToast('اپلیکیشن با موفقیت روی دستگاه شما نصب شد!', 'success');
+                }
+                deferredInstallPrompt = null;
+            } else {
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                if (isIOS) {
+                    showToast('در آیفون: دکمه Share مرورگر Safari را بزنید و گزینه Add to Home Screen را انتخاب کنید.', 'info');
+                } else {
+                    showToast('برای نصب: از منوی ۳ نقطه مرورگر گزینه Install یا Add to Home Screen را بزنید (یا آیکون ➕ نوار آدرس).', 'info');
+                }
+            }
+        });
+    }
 };
 
 // Tab Switching
@@ -357,12 +367,12 @@ const fetchMonitors = async (silent = false) => {
                     </div>
                     
                     <div class="monitor-stats">
-                        <span class="stat-item"><i class="fa-solid fa-bus"></i> کل اتوبوس‌ها: ${m.total_buses}</span>
+                        <span class="stat-item"><i class="fa-solid fa-bus"></i> کل: ${m.total_buses}</span>
                         <span class="stat-item ${seatsClass}"><i class="fa-solid fa-chair"></i> صندلی خالی: <strong>${m.available_seats}</strong></span>
                     </div>
                     
                     <div class="monitor-footer">
-                        <span>آخرین بررسی: ${lastCheckTime}</span>
+                        <span class="last-check-text">آخرین بررسی: ${lastCheckTime}</span>
                         <div class="monitor-actions" onclick="event.stopPropagation()">
                             <button class="btn btn-icon btn-sm" onclick="triggerCheck('${m.id}')" title="استعلام فوری">
                                 <i class="fa-solid fa-arrows-rotate"></i>
@@ -536,21 +546,28 @@ const renderBuses = () => {
 
         return `
             <div class="bus-row">
-                <div class="bus-time">
-                    <i class="fa-solid ${isSavari ? 'fa-car color-warning' : 'fa-clock color-primary'}"></i> ${b.DepartureTime}
-                </div>
-                <div class="bus-company">
-                    <div class="d-flex align-center gap-2">
-                        <span class="company-name">${b.CompanyPersianName}</span>
-                        ${vipTag}
+                <div class="bus-row-main">
+                    <div class="bus-time">
+                        <i class="fa-solid ${isSavari ? 'fa-car color-warning' : 'fa-clock color-primary'}"></i> ${b.DepartureTime}
                     </div>
-                    ${vehicleBadge}
-                    ${busTypeDetail}
+                    
+                    <div class="bus-company">
+                        <div class="company-title-row">
+                            <span class="company-name">${b.CompanyPersianName}</span>
+                            ${vipTag}
+                        </div>
+                        <div class="company-meta-row">
+                            ${vehicleBadge}
+                            ${busTypeDetail}
+                        </div>
+                    </div>
                 </div>
-                <div>${seatsBadge}</div>
-                <div class="bus-price">${priceText}</div>
-                <div>
-                    <a href="${purchaseUrl}" target="_blank" class="btn btn-primary btn-sm">
+
+                <div class="bus-seats-cell">${seatsBadge}</div>
+                
+                <div class="bus-row-actions">
+                    <div class="bus-price">${priceText}</div>
+                    <a href="${purchaseUrl}" target="_blank" class="btn btn-primary btn-sm btn-buy">
                         <i class="fa-solid fa-ticket"></i> خرید بلیط
                     </a>
                 </div>
