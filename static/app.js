@@ -330,7 +330,7 @@ const handleAddUrl = async (e) => {
     
     const submitBtn = document.getElementById('btn-submit-url');
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> در حال استعلام اولیه...';
+    // submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> در حال استعلام اولیه...';
     
     try {
         const resp = await fetch('/api/monitors', {
@@ -351,7 +351,7 @@ const handleAddUrl = async (e) => {
         showToast('خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.', 'error');
     } finally {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> شروع پایش مسیر';
+        // submitBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> شروع پایش مسیر';
     }
 };
 

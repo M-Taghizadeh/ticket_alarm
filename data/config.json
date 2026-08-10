@@ -24,7 +24,7 @@
       "date": "1405-05-20",
       "active": true,
       "created_at": "2026-08-10 11:03:07",
-      "last_checked": "2026-08-10 12:50:03",
+      "last_checked": "2026-08-10 12:54:42",
       "total_buses": 45,
       "available_seats": 146,
       "status": "OK"
@@ -39,7 +39,7 @@
       "date": "1405-05-20",
       "active": true,
       "created_at": "2026-08-10 11:09:15",
-      "last_checked": "2026-08-10 12:50:06",
+      "last_checked": "2026-08-10 12:54:46",
       "total_buses": 16,
       "available_seats": 63,
       "status": "OK"
@@ -54,7 +54,7 @@
       "date": "1405-05-20",
       "active": true,
       "created_at": "2026-08-10 11:32:36",
-      "last_checked": "2026-08-10 12:50:09",
+      "last_checked": "2026-08-10 12:54:49",
       "total_buses": 45,
       "available_seats": 146,
       "status": "OK"
